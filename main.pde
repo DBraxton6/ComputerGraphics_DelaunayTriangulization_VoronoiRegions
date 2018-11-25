@@ -1,3 +1,4 @@
+
 //  ******************* 2018 Project 3 basecde ***********************
 Boolean 
   showFloor=true,
@@ -136,9 +137,15 @@ void draw() {
  // **05 implement corner operators in Mesh
   if(step5) 
     {
-    live=false;
-    fill(magenta); 
-    if(showCorner) M.showCurrentCorner(20); 
+      live=false;
+      fill(magenta); 
+      if(showCorner) M.showCurrentCorner(20);
+      //if(showOpposite) {
+      // pushMatrix();
+      // translate(0,0,6); noFill(); stroke(black);
+      // M.showOpposites();
+      // popMatrix();
+      //}
     }
     
   if(step6)

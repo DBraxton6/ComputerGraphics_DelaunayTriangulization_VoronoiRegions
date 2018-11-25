@@ -56,7 +56,8 @@ class MESH {
   void showInteriorVertices(float r) {for (int v=0; v<nv; v++) if(isInterior[v]) show(G[v],r); }                          // shows all vertices as dots
   void showTriangles() { for (int c=0; c<nc; c+=3) show(g(c), g(c+1), g(c+2)); }         // draws all triangles (edges, or filled)
   void showEdges() {for (int i=0; i<nc; i++) showEdge(i); };         // draws all edges of mesh twice
-
+  void showOpposites() {for (int i=0; i<nc; i++)  showEdge(i); };
+  
   void triangulate()      // performs Delaunay triangulation using a quartic algorithm
    {
    c=0;                   // to reset current corner
@@ -189,10 +190,10 @@ class MESH {
    // **05 implement corner operators in Mesh
   int v (int c) {return V[c];}                          // vertex of c
   int o (int c) {return O[c];}                          // opposite corner
-  int l (int c) {return 0;}                             // left
-  int s (int c) {return 0;}                             // swing
-  int u (int c) {return 0;}                             // unswing
-  int r (int c) {return 0;}                             // right
+  int l (int c) {return O[n(c)];}                       // left
+  int s (int c) {return n(l(c));}                       // swing
+  int u (int c) {return n(r(c));}                             // unswing
+  int r (int c) {return O[p(c)];}                       // right
 
   
 
