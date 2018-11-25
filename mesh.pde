@@ -56,7 +56,11 @@ class MESH {
   void showInteriorVertices(float r) {for (int v=0; v<nv; v++) if(isInterior[v]) show(G[v],r); }                          // shows all vertices as dots
   void showTriangles() { for (int c=0; c<nc; c+=3) show(g(c), g(c+1), g(c+2)); }         // draws all triangles (edges, or filled)
   void showEdges() {for (int i=0; i<nc; i++) showEdge(i); };         // draws all edges of mesh twice
-  void showOpposites() {for (int i=0; i<nc; i++)  showEdge(i); };
+  void showOpposites() { 
+    for(int c = 0; c < nc; c++) {
+      drawParabolaInHat(G[V[c]], P(G[V[n(c)]], G[V[p(c)]]), G[V[o(c)]], 3); 
+    }
+  };
   
   void triangulate()      // performs Delaunay triangulation using a quartic algorithm
    {
@@ -125,7 +129,6 @@ class MESH {
        count++; 
      }
     }
-    
     return count;
    }
 
@@ -212,11 +215,11 @@ class MESH {
     }
   }
   
-  void drawVoronoiFaceofInteriorVertices() {
+  void drawVoronoiFaceOfInteriorVertices() {
     float dc = 1./(nv-1);
     for(int v = 0; v < nv; v++) {
        if(isInterior[v]) {
-          fill(dc*255*(nv-v), 200);
+          fill(dc*255*v, dc*255*(nv-v), 200);
           drawVoronoiFaceOfInteriorVertex(v);
        }
     }
@@ -224,6 +227,7 @@ class MESH {
 
   void drawVoronoiFaceOfInteriorVertex(int v) {
     /** implement */
+    cornerIndexOfVertexIndex(v);
     beginShape(POLYGON);
     for(int c = 0; c<nc; c++) {
       if(V[c] == v) {
@@ -251,6 +255,27 @@ class MESH {
   void showArcs() // draws arcs of quadratic B-spline of Voronoi boundary loops of interior vertices
     { 
     // **06 implement it
+    for(int v = 0; v<nv; v++) {
+       pts CCP = new pts();
+       int count= 0;
+       if(isInterior[v]) {
+         CCP.empty();
+         for(int c =0; c <nv; c++) {
+           if(V[c]==v) {
+             CCP.G[count] = triCircumcenter(c);
+             count++;
+           }
+         }
+       }
+       beginShape();
+       for(int i =0; i<count-2; i++) {
+         pt mid1 = P(CCP.G[i], CCP.G[n(i)]);
+         pt tip = CCP.G[n(i)];
+         pt mid2 = P(CCP.G[n(i)], CCP.G[n((i))]);
+         vertex(Bezier(mid1, tip, mid2, t));
+       }
+       endShape(CLOSE);
+    }
     }               // draws arcs in triangles
 
  
