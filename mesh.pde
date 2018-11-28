@@ -203,17 +203,19 @@ class MESH {
   void showVoronoiEdges() // draws Voronoi edges on the boundary of Voroni cells of interior vertices
   { 
     // **06 implement it
-    for(int v = 0; v <nc; v++) {
-      fill(yellow);
-      beginShape(POLYGON);
-      vertex(triCircumcenter(c));
-      //swing around the corner
-      for(int c = 0; c<nc; c++) {
-        vertex(triCircumcenter(n(c)));
+    int newCorner;
+    for(int v = 0; v < nv; v++) {
+      beginShape();
+      c = cornerIndexFromVertexIndex(v);
+      newCorner = s(c);
+      while(c != newCorner) {
+        vertex(triCircumcenter(c));
+        newCorner = s(newCorner);
       }
       endShape(CLOSE);
     }
   }
+
   
   void drawVoronoiFaceOfInteriorVertices() {
     float dc = 1./(nv-1);
@@ -227,30 +229,24 @@ class MESH {
 
   void drawVoronoiFaceOfInteriorVertex(int v) {
     /** implement */
-    cornerIndexOfVertexIndex(v);
-    beginShape(POLYGON);
-    for(int c = 0; c<nc; c++) {
-      if(V[c] == v) {
-        vertex(triCircumcenter(c)); 
+      beginShape();
+      for(int c = 0; c < nc; c++) {
+        if(V[c] == v) {
+          vertex(triCircumcenter(c));  
+        }
       }
-    }
-    endShape(CLOSE);
+      endShape(CLOSE);
   }  
   
-  int cornerIndexOfVertexIndex(int v) {
-    int corner = 0; 
-    boolean found = false;
-    int j = 0;
-    while(!found) {
-       if(V[j] == v) {
-          corner = u(s(j));
-          found = true;
-       } else {
-          j++; 
-       }
+  int cornerIndexFromVertexIndex(int v) {
+    for(int c = 0; c < nc; c++) {
+      if(V[c] == v) {
+        return c;  
+      }
     }
-     return corner; 
+    return -1;
   }
+  
 
   void showArcs() // draws arcs of quadratic B-spline of Voronoi boundary loops of interior vertices
     { 
