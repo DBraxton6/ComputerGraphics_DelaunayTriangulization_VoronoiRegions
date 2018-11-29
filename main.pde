@@ -54,6 +54,8 @@ int
 pts P = new pts(); // polyloop in 3D
 pts Q = new pts(); // second polyloop in 3D
 pts R, S, T; 
+pt roomba = new pt();
+pt leash = new pt();
 EdgeSet BP = new EdgeSet();  
 MESH M = new MESH();
 
@@ -78,6 +80,7 @@ void draw() {
   hint(ENABLE_DEPTH_TEST); 
   pushMatrix();   // to ensure that we can restore the standard view before writing on the canvas
   setView();  // see pick tab
+  
   if(showFloor) showFloor(h); // draws dance floor as yellow mat
   doPick(); // sets Of and axes for 3D GUI (see pick Tab)
   R.SETppToIDofVertexWithClosestScreenProjectionTo(Mouse()); // for picking (does not set P.pv)
@@ -162,11 +165,9 @@ void draw() {
 
   if(step7)
     {
-    fill(blue); show(R.G[0],1.1*rb);
-    fill(orange); beam(P.G[0],P.G[1],rt);
-    fill(grey); beam(R.G[0],R.G[1],1.1*rt); beam(R.G[1],R.G[2],1.1*rt); beam(R.G[2],R.G[0],1.1*rt);
-    fill(red); show(CircumCenter(R.G[0],R.G[1],R.G[2]),15);
-    fill(magenta,200); show(CircumCenter(R.G[0],R.G[1],R.G[2]),circumRadius(R.G[0],R.G[1],R.G[2]));
+    //pt T = Of;
+    //M.showRoomba(roomba, Of);
+    roomba = M.showRoomba(roomba, Of);
     }
     
   if(step8)

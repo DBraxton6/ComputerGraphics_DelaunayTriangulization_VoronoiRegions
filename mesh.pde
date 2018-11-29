@@ -274,6 +274,55 @@ class MESH {
     }
     }               // draws arcs in triangles
 
+//return a pt
+//return roomba
+  pt showRoomba(pt roomba, pt T) {
+    pt position = new pt();
+    position = triCircumcenter(c);
+    
+    if(roomba == null) {
+      roomba = position;
+    }
+    
+   // pillar(position, 200, 45);
+   // P(T.x() + T.y() + T.z(), 200);
+    
+    float shortest;
+    
+    float[] distances = new float[4];
+    pt[] circums = new pt[4];
+    
+    circums[0] = triCircumcenter(c);
+    circums[1] = triCircumcenter(l(c));
+    circums[2] = triCircumcenter(r(c));
+    circums[3] = triCircumcenter(o(c));
+    
+    float currDist = d(triCircumcenter(c), T);  //distance between current corner and mouse position
+    float leftDist = d(triCircumcenter(l(c)), T);  //distance between left of corner and mouse position
+    float rightDist = d(triCircumcenter(r(c)), T);  //distance between right of corner and mouse position
+    float oppDist = d(triCircumcenter(o(c)), T);  //distance between opposite of corner and mouse position
+    
+    distances[0] = currDist;
+    distances[1] = leftDist;
+    distances[2] = rightDist; 
+    distances[3] = oppDist; 
+     
+    shortest = distances[0];
+    position = circums[0];
+    
+    for(int i = 1; i < distances.length; i++) {
+      if(distances[i] < shortest) {
+        shortest = distances[i];
+        position = circums[i];
+      }
+    }
+    
+    
+    roomba = position;
+    pillar(position, 200, 45);
+    
+    return roomba;
+  }
  
   pt triCenter(int c) {return P(g(c),g(n(c)),g(p(c))); }  // returns center of mass of triangle of corner c
   pt triCircumcenter(int c) {return CircumCenter(g(c),g(n(c)),g(p(c))); }  // returns circumcenter of triangle of corner c
